@@ -61,11 +61,12 @@ async function deleteTag() {
     if (error.message === "Reference does not exist") {
       console.error("😕  Proceeding anyway, because tag not existing is the goal");
     } else {
-      console.error(`🌶  An error occured while deleting the tag "${tagName}"`);
       if (skipIfNotExist) {
         process.exitCode = 0;
+        console.info(`🏷  An error occured while deleting the tag "${tagName}", skip it`);
       } else {
         process.exitCode = 1;
+        console.error(`🌶  An error occured while deleting the tag "${tagName}"`);
       }
     }
     return;
@@ -84,11 +85,12 @@ async function deleteReleases() {
       .filter(({ tag_name, draft }) => tag_name === tagName && draft === false)
       .map(({ id }) => id);
   } catch (error) {
-    console.error(`🌶  failed to get list of releases <- ${error.message}`);
     if (skipIfNotExist) {
       process.exitCode = 0;
+      console.info(`🏷  failed to get list of releases <- ${error.message}, skip it`);
     } else {
       process.exitCode = 1;
+      console.error(`🌶  failed to get list of releases <- ${error.message}`);
     }
     return;
   }
