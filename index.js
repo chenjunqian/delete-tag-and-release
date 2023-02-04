@@ -27,6 +27,8 @@ if (!process.env.INPUT_TAG_NAME) {
 }
 const tagName = process.env.INPUT_TAG_NAME;
 
+const skipIfNotExist = process.env.INPUT_SKIP_IF_NOT_EXIST;
+
 const shouldDeleteRelease = process.env.INPUT_DELETE_RELEASE === "true";
 
 const commonOpts = {
@@ -59,7 +61,11 @@ async function deleteTag() {
       console.error("😕  Proceeding anyway, because tag not existing is the goal");
     } else {
       console.error(`🌶  An error occured while deleting the tag "${tagName}"`);
-      process.exitCode = 1;
+      if (skipIfNotExist) {
+        process.exitCode = 0;
+      } else {
+        process.exitCode = 1;
+      }
     }
     return;
   }
@@ -78,7 +84,11 @@ async function deleteReleases() {
       .map(({ id }) => id);
   } catch (error) {
     console.error(`🌶  failed to get list of releases <- ${error.message}`);
-    process.exitCode = 1;
+    if (skipIfNotExist) {
+      process.exitCode = 0;
+    } else {
+      process.exitCode = 1;
+    }
     return;
   }
 
