@@ -43,6 +43,7 @@ const commonOpts = {
 };
 
 console.log(`🏷  given tag is "${tagName}"`);
+console.log(`🏷  skip if tag not exist "${skipIfNotExist}"`)
 
 const tagRef = `refs/tags/${tagName}`;
 
